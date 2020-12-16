@@ -1,6 +1,7 @@
 package com.kata.stringCalculator;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class StringCalculator {
 
@@ -13,7 +14,14 @@ public class StringCalculator {
 	}
 
 	private int sum() {
-		return Arrays.stream(numbers.split(delimeter)).mapToInt(Integer::parseInt).sum();
+		if (getNumber().anyMatch(n -> n < 0)) {
+			throw new IllegalArgumentException();
+		}
+		return getNumber().sum();
+	}
+
+	private IntStream getNumber() {
+		return Arrays.stream(numbers.split(delimeter)).mapToInt(Integer::parseInt);
 	}
 
 	public static int add(String numbers) {

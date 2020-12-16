@@ -45,4 +45,11 @@ public class StringCalculatorTest {
 		assertEquals(StringCalculator.add("//;\n1;2"), 3);
 
 	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void throwsOnNegativeNumber() {
+		StringCalculator.add("-3");
+		//assertEquals(StringCalculator.add("//;\n1;2"), 3);
+
+	}
 }
