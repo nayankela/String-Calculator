@@ -17,4 +17,11 @@ public class StringCalculatorTest {
 		assertEquals(StringCalculator.add("5"), 5);
 		assertEquals(StringCalculator.add("42"), 42);
 	}
+
+	@Test
+	public void sumsTwoNumbersSeperatedByComma() {
+		assertEquals(StringCalculator.add("1,2"), 3);
+		assertEquals(StringCalculator.add("1,3"), 4);
+
+	}
 }
