@@ -22,6 +22,10 @@ public class StringCalculatorTest {
 	public void sumsTwoNumbersSeperatedByComma() {
 		assertEquals(StringCalculator.add("1,2"), 3);
 		assertEquals(StringCalculator.add("1,3"), 4);
+	}
 
+	@Test
+	public void sumsThreeNumbersSeperatedByComma() {
+		assertEquals(StringCalculator.add("1,2,3"), 6);
 	}
 }
