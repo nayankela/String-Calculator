@@ -1,7 +1,8 @@
 package com.kata.stringCalculator;
 
-import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class StringCalculator {
 
@@ -14,20 +15,31 @@ public class StringCalculator {
 	}
 
 	private int sum() {
-		if (getNumber().anyMatch(n -> n < 0)) {
-			throw new IllegalArgumentException();
-		}
+		ensureNonNegativeNumbers();
 		return getNumber().sum();
 	}
 
+	private void ensureNonNegativeNumbers() {
+		String negativeNumberSequence = getNumber().filter(n -> n < 0).mapToObj(Integer::toString)
+				.collect(Collectors.joining(","));
+
+		if (!negativeNumberSequence.isEmpty()) {
+
+			throw new IllegalArgumentException("negative number : " + negativeNumberSequence);
+		}
+	}
+
 	private IntStream getNumber() {
-		return Arrays.stream(numbers.split(delimeter)).mapToInt(Integer::parseInt);
+		if (numbers.isEmpty()) {
+			return IntStream.empty();
+		} else {
+			return Stream.of(numbers.split(delimeter)).mapToInt(Integer::parseInt);
+		}
+
+//		return Arrays.stream(numbers.split(delimeter)).mapToInt(Integer::parseInt);
 	}
 
 	public static int add(String numbers) {
-		if (numbers.isEmpty())
-			return 0;
-
 		return parseInput(numbers).sum();
 	}
 

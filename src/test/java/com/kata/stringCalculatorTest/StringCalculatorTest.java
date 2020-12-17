@@ -1,7 +1,10 @@
 package com.kata.stringCalculatorTest;
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import com.kata.stringCalculator.StringCalculator;
 
@@ -45,11 +48,23 @@ public class StringCalculatorTest {
 		assertEquals(StringCalculator.add("//;\n1;2"), 3);
 
 	}
-	
-	@Test(expected = IllegalArgumentException.class)
+
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
+
+	@Test
 	public void throwsOnNegativeNumber() {
+		expectedException.expect(IllegalArgumentException.class);
+		expectedException.expectMessage("negative number: -3");
 		StringCalculator.add("-3");
-		//assertEquals(StringCalculator.add("//;\n1;2"), 3);
+
+	}
+
+	@Test
+	public void throwsOnNegativeNumbersWithAllNumbersInExceptionMessage() {
+		expectedException.expect(IllegalArgumentException.class);
+		expectedException.expectMessage("negative number: -3, -5, -13");
+		StringCalculator.add("1,-3,5,-5,-13");
 
 	}
 }
