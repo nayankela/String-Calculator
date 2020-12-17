@@ -46,6 +46,7 @@ public class StringCalculatorTest {
 	@Test
 	public void usesDelimiterSpecified() {
 		assertEquals(StringCalculator.add("//;\n1;2"), 3);
+		assertEquals(StringCalculator.add("//.\n2.3.1"), 6);
 
 	}
 
@@ -65,6 +66,24 @@ public class StringCalculatorTest {
 		expectedException.expect(IllegalArgumentException.class);
 		expectedException.expectMessage("negative number: -3, -5, -13");
 		StringCalculator.add("1,-3,5,-5,-13");
+
+	}
+
+	@Test
+	public void mapsNumbersAbove1000ToLastThreeDigits() {
+		assertEquals(StringCalculator.add("1002"), 2);
+	}
+
+	@Test
+	public void acceptsDelimiterOfArbitaryLength() {
+		assertEquals(StringCalculator.add("//[***]\n1***2***3"), 6);
+
+	}
+	
+	@Test
+	public void acceptsMultipleDelimiters() {
+		assertEquals(StringCalculator.add("//[-][;]\n1-2;3"), 6);
+		assertEquals(StringCalculator.add("//[--][...]\n2--3...4"), 9);
 
 	}
 }

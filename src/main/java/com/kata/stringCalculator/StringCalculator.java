@@ -1,5 +1,6 @@
 package com.kata.stringCalculator;
 
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -16,11 +17,11 @@ public class StringCalculator {
 
 	private int sum() {
 		ensureNonNegativeNumbers();
-		return getNumber().sum();
+		return getNumbers().sum();
 	}
 
 	private void ensureNonNegativeNumbers() {
-		String negativeNumberSequence = getNumber().filter(n -> n < 0).mapToObj(Integer::toString)
+		String negativeNumberSequence = getNumbers().filter(n -> n < 0).mapToObj(Integer::toString)
 				.collect(Collectors.joining(","));
 
 		if (!negativeNumberSequence.isEmpty()) {
@@ -29,14 +30,13 @@ public class StringCalculator {
 		}
 	}
 
-	private IntStream getNumber() {
+	private IntStream getNumbers() {
 		if (numbers.isEmpty()) {
 			return IntStream.empty();
 		} else {
-			return Stream.of(numbers.split(delimeter)).mapToInt(Integer::parseInt);
+			return Stream.of(numbers.split(delimeter)).mapToInt(Integer::parseInt).map(n -> n % 1000);
 		}
 
-//		return Arrays.stream(numbers.split(delimeter)).mapToInt(Integer::parseInt);
 	}
 
 	public static int add(String numbers) {
@@ -45,11 +45,22 @@ public class StringCalculator {
 
 	private static StringCalculator parseInput(String numbers) {
 		if (numbers.startsWith("//")) {
-			String[] parts = numbers.split("\n", 2);
-			return new StringCalculator(parts[0].substring(2), parts[1]);
+			String[] headerAndNumberSequence = numbers.split("\n", 2);
+			// String header = parts[0];
+			String delimeter = parseDelimiter(headerAndNumberSequence[0]);
+			return new StringCalculator(delimeter, headerAndNumberSequence[1]);
 		} else {
 			return new StringCalculator(",|\n", numbers);
 		}
 
+	}
+
+	private static String parseDelimiter(String header) {
+		String delimiter = header.substring(2);
+		if (delimiter.startsWith("[")) {
+
+			delimiter = delimiter.substring(1, delimiter.length() - 1);
+		}
+		return Stream.of(delimiter.split("]\\[")).map(Pattern::quote).collect(Collectors.joining("|"));
 	}
 }
